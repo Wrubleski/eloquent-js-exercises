@@ -15,8 +15,9 @@ Passing this string to console.log should show something like this:
 */
 
 
-const chessString = () => {
+const chessBoard = (size) => {
 	let grid = ''
+	size /= 2;
 
 	const concatBlack = () => {
 		grid = grid.concat("#");
@@ -33,21 +34,21 @@ const chessString = () => {
 
 
 	const firstWhite = () => {
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < size; i++) {
 		concatWhite();
 		concatBlack();
 		}
 	}
 
 	const firstBlack = () => {
-		for(let j = 0; j < 4; j ++){
+		for(let j = 0; j < size; j ++){
 		concatBlack();
 		concatWhite();
 		}
 	}
 
 
-	for (let k = 0; k < 4; k++) {
+	for (let k = 0; k < size; k++) {
 		 firstWhite();
 		 newLine();
 		 firstBlack();
@@ -58,4 +59,4 @@ const chessString = () => {
 	return grid;	
 }
 
-console.log(chessString());
+console.log(chessBoard(8));
