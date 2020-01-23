@@ -41,7 +41,7 @@ const chessBoard = (size) => {
 	}
 
 	const firstBlack = () => {
-		for(let j = 0; j < size; j ++){
+		for (let j = 0; j < size; j ++){
 		concatBlack();
 		concatWhite();
 		}
