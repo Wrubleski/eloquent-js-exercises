@@ -10,19 +10,21 @@ Define a recursive function isEven corresponding to this description. The funcct
 
 */
 
-/*
-TODO - Arrumar os casos de numero negativo. Esta dando stack overflow pois não para de subtrair 2 nunca, ja que a recursão só para se numero === 0 ou numero === 1;
-
-*/
 
 
 const isEven = (number) => {
-	if (number === 0) {
-		return true;
-	} else if (number === 1) {
-		return false;
-	} else {
-		return isEven(number-2);
+	switch (true) {
+		case number < 0:
+			return "Please enter a positive number!";
+			break;
+		case number === 0:
+			return true;
+			break;
+		case number === 1:
+			return false;
+			break;
+		default:
+			return isEven(number-2);
 	}
 }
 
