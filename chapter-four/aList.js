@@ -21,7 +21,6 @@ If you haven't already, also write a recursive version of nth.
 **/
 
 
-
 function arrayToList(input){
 	let output = {};
 	if (input.length !== 1) {
@@ -37,10 +36,36 @@ function arrayToList(input){
 
 function listToArray(input){
 	let output = [];
-
-
+	if (input.rest === null) {
+		output.push(input.value);
+	} else {
+		output.push(input.value);
+		output.push(...listToArray(input.rest));		
+	}
 	return output;
 }
 
+function prepend(element, list){
+	return {value : element, rest : list}; 
+}
+
+function nth(list, number){	
+	if (number > 0) {
+		return nth(list.rest, number -1)
+	} else {
+		return list.value;
+	}
+}
+
+
+
+
+
 console.log(arrayToList([10, 20]));
 // → {value: 10, rest: {value: 20, rest: null}}
+console.log(listToArray(arrayToList([10, 20, 30])));
+// → [10, 20, 30]
+console.log(prepend(10, prepend(20, null)));
+// → {value: 10, rest: {value: 20, rest: null}}
+console.log(nth(arrayToList([10, 20, 30]), 1));
+// → 20
