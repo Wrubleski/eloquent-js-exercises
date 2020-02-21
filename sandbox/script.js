@@ -1,4 +1,4 @@
-require("./dataset.js");
+// require("./dataset.js");
 /*
 function repeat(n, action) {
 	for  (let i = 0; i < n; i ++) {
@@ -131,46 +131,105 @@ console.log(Math.round(average(
 }
 */
 
-function characterScript(code){
-	for (let script of SCRIPTS){
-		if (script.ranges.some(([from, to]) => {
-			return code >= from && code < to;
-		})) {
-			return script;
+// function characterScript(code){
+// 	for (let script of SCRIPTS){
+// 		if (script.ranges.some(([from, to]) => {
+// 			return code >= from && code < to;
+// 		})) {
+// 			return script;
+// 		}
+// 	}
+// 	return null;
+// }
+
+
+
+// function countBy(items, groupName) {
+// 	let counts = [];
+// 	for (let item of items) {
+// 		let name = groupName(item);
+// 		let know = counts.findIndex(c => c.name == name);
+// 		if (know == -1) {
+// 			counts.push({name, count: 1});
+// 		} else {
+// 			counts[know].count++;
+// 		}
+// 	}
+// 	return counts;
+// }
+
+
+// function textScripts(text) {
+// 	let scripts = countBy(text, char => {
+// 		let script = characterScript(char.codePointAt(0));
+// 		return script ? script.name : "none";
+// 	}).filter(({name}) => name != "none");
+
+// 	let total = scripts.reduce((n, {count}) => n + count, 0);
+// 	if (total == 0) return "No scripts found";
+
+// 	return scripts.map(({name, count}) => {
+// 		return `${Math.round(count * 100 / total)}% ${name}`;
+// 	}).join(",");
+// }
+
+// console.log(textScripts('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
+
+
+class Matrix {
+	constructor(width, height, element = (x, y) => undefined) {
+		this.width = width;
+		this.height = height;
+		this.content = [];
+
+		for (let y = 0; y < height; y++) {
+			for (let x = 0; x < width; x++) {
+				this.content[y * width + x] = element(x, y);
+			}
 		}
 	}
-	return null;
-}
 
-
-
-function countBy(items, groupName) {
-	let counts = [];
-	for (let item of items) {
-		let name = groupName(item);
-		let know = counts.findIndex(c => c.name == name);
-		if (know == -1) {
-			counts.push({name, count: 1});
-		} else {
-			counts[know].count++;
-		}
+	get(x, y) {
+		return this.content[y * this.width + x];
 	}
-	return counts;
+
+	set(x, y, value) {
+		this.content[y * this.width + x] = value;
+	}
+
+
 }
 
+class MatrixIterator {
+	constructor(matrix) {
+		this.x = 0;
+		this.y = 0;
+		this.matrix = matrix;		
+	}
 
-function textScripts(text) {
-	let scripts = countBy(text, char => {
-		let script = characterScript(char.codePointAt(0));
-		return script ? script.name : "none";
-	}).filter(({name}) => name != "none");
+	next() {
+		if (this.y == this.matrix.height) return {done: true};
 
-	let total = scripts.reduce((n, {count}) => n + count, 0);
-	if (total == 0) return "No scripts found";
+		let value = {x: this.x,
+					 y: this.y,
+					 value: this.matrix.get(this.x, this.y)}
+		
+		this.x++;
+		if (this.x == this.matrix.width) {
+			this.x = 0;
+			this.y++;
+		}
 
-	return scripts.map(({name, count}) => {
-		return `${Math.round(count * 100 / total)}% ${name}`;
-	}).join(",");
+		return {value, done: false};
+	} 
 }
 
-console.log(textScripts('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
+Matrix.prototype[Symbol.iterator] = function() {
+	return new MatrixIterator(this);
+}
+
+let matrix = new Matrix(2,2,(x,y) => `Value ${x}, ${y}`);
+
+for (let {x,y,value} of matrix) {
+	console.log(x,y,value);
+}
